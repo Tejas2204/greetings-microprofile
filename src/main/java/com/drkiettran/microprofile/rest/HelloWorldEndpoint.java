@@ -18,8 +18,8 @@ public class HelloWorldEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{year}/{month}/{day}")
 	public Response doGetDate(@PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day) {
-
-		String date = year + "/" + month + "/" + day;
+        String date = year + "/" + month + "/" + day;
+		System.out.println("Received:" + date);
 		Message message = new Message();
 		message.setName("Thorntail");
 		message.setMessage(date);
@@ -38,6 +38,24 @@ public class HelloWorldEndpoint {
 		Message message = new Message();
 		Greetings greetings = new Greetings();
 		message.setName(inMessage.getName());
+		message.setMessage(greetings.hello(inMessage.getName()));
+		return Response.status(200).entity(message).build();
+	}
+	
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/{firstname}/{lastname}")
+	public Response doPutDate(@PathParam("firstname") String firstName, @PathParam("lastname") String lastName,
+			Message inMessage) throws UnknownHostException {
+		System.out.println("inMessage: " + inMessage.getName() + ":" + inMessage.getMessage());
+		
+		Message message = new Message();
+		Greetings greetings = new Greetings();
+		message.setName(inMessage.getName());
+		message.setLastName(lastName);
+		message.setFirstName(firstName);
+		message.setId((int) (Math.random() * 1000000L));
 		message.setMessage(greetings.hello(inMessage.getName()));
 		return Response.status(200).entity(message).build();
 	}
